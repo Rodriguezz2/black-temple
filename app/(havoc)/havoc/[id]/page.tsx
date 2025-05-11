@@ -6,10 +6,9 @@ import { notFound } from "next/navigation";
 export default async function GuidePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  // Деструктурируем `id` после объявления `params`
-  const { id } = params;
+  const { id } = await params;
 
   const guide = await prisma.guide.findFirst({
     where: { id: Number(id) },
