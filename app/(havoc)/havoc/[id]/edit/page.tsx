@@ -8,11 +8,10 @@ export default async function EditGuidePage({
 }: {
   params: { id: string };
 }) {
-  // Деструктурируем `id` после объявления `params`
-  const { id } = await params;
+  const { id } = params;
 
   const guide = await prisma.guide.findFirst({
-    where: { id: Number(id) },
+    where: { id: Number(id) }, // Преобразуем string в number
     include: {
       heroTalents: {
         include: {
@@ -27,10 +26,8 @@ export default async function EditGuidePage({
   }
 
   return (
-    <>
-      <Container className="secondary dark:bg-zinc-900 px-4 pb-10">
-        <CreateGuide guide={guide} />
-      </Container>
-    </>
+    <Container className="secondary dark:bg-zinc-900 px-4 pb-10">
+      <CreateGuide guide={guide} />
+    </Container>
   );
 }
