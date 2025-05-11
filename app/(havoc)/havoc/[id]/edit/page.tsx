@@ -10,8 +10,8 @@ export default async function EditGuidePage({
 }) {
   const { id } = params;
 
-  const guide = await prisma.guide.findFirst({
-    where: { id: Number(id) }, // Преобразуем string в number
+  const guide = await prisma.guide.findUnique({
+    where: { id: Number(id) },
     include: {
       heroTalents: {
         include: {
