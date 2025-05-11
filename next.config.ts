@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Базовые настройки Next.js */
   images: {
     remotePatterns: [
       {
@@ -17,6 +17,19 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+
+  /* Фикс для Prisma на Vercel */
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Указываем Webpack, где искать сгенерированный Prisma-клиент
+      config.resolve.alias["@prisma/client"] =
+        require.resolve("@prisma/client");
+
+      // Игнорируем предупреждения о неоптимальных зависимостях (опционально)
+      config.ignoreWarnings = [{ module: /@prisma\/client/ }];
+    }
+    return config;
   },
 };
 
