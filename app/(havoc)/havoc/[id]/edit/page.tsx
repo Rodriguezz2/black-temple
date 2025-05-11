@@ -8,7 +8,8 @@ export default async function EditGuidePage({
 }: {
   params: { id: string };
 }) {
-  const { id } = params;
+  // Деструктурируем `id` после объявления `params`
+  const { id } = await params;
 
   const guide = await prisma.guide.findFirst({
     where: { id: Number(id) },
