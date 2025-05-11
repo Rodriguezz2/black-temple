@@ -8,9 +8,9 @@ export default async function EditGuidePage({
 }: {
   params: { id: string };
 }) {
-  const { id } = params;
+  const { id } = await params;
 
-  const guide = await prisma.guide.findUnique({
+  const guide = await prisma.guide.findFirst({
     where: { id: Number(id) },
     include: {
       heroTalents: {
@@ -26,8 +26,10 @@ export default async function EditGuidePage({
   }
 
   return (
-    <Container className="secondary dark:bg-zinc-900 px-4 pb-10">
-      <CreateGuide guide={guide} />
-    </Container>
+    <>
+      <Container className="secondary dark:bg-zinc-900 px-4 pb-10">
+        <CreateGuide guide={guide} />
+      </Container>
+    </>
   );
 }
