@@ -1,4 +1,4 @@
-import { Guide, HeroTalents, Tab } from "@prisma/client";
+import type { Guide, HeroTalents, Tab } from "@prisma/client";
 
 export type GuideProps = Guide & {
   heroTalents: (HeroTalents & { tabs: Tab[] }) | null;
