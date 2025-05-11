@@ -9,7 +9,7 @@ export default async function GuidePage({
   params: { id: string };
 }) {
   // Деструктурируем `id` после объявления `params`
-  const { id } = await params;
+  const { id } = params;
 
   const guide = await prisma.guide.findFirst({
     where: { id: Number(id) },
