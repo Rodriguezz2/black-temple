@@ -8,7 +8,7 @@ export default async function EditGuidePage({
 }: {
   params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   const guide = await prisma.guide.findFirst({
     where: { id: Number(id) },
