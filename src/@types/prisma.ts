@@ -103,5 +103,3 @@ export interface GuideSpecGearProps {
   spec: string;
   gearData: GearItem[];
 }
-
-export type BisGearProps = Prisma.OverviewGearGetPayload<{}>;
