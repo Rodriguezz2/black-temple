@@ -3,7 +3,9 @@ import {
   ClassSpecialization,
   Guide,
   HeroTalents,
+  OverviewGear,
   Prisma,
+  Socket,
   Tab,
 } from '@prisma/client';
 
@@ -88,11 +90,9 @@ export type GuideButtonWithRelations = Prisma.GuideGetPayload<{
   };
 }>;
 
-export type GearItem = Prisma.OverviewGearGetPayload<{
-  include: {
-    itemSockets: true;
-  };
-}>;
+export type GearItem = OverviewGear & {
+  itemSockets: Socket[];
+};
 
 export interface GuideSpecGearProps {
   guideId: number;
