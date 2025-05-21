@@ -1,5 +1,4 @@
 import { GuidePageProps } from '@root/@types/prisma';
-import { TabsEditor } from './tabs-editor';
 import { BisGearEditor } from './bis-gear-editor';
 import { LeftSideBar } from '@root/components/shared/class-guides';
 import { GuideSpecBanner } from '@root/components/shared/class-guides/page/guide-page';
@@ -13,26 +12,6 @@ interface GuideEditorProps {
 }
 
 export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
-  // Преобразуем данные для компонента TabsEditor
-  const tabsData =
-    guide.heroTalents?.tabs.map(tab => ({
-      id: tab.id,
-      createdAt: tab.createdAt,
-      updatedAt: tab.updatedAt,
-      value: tab.value,
-      label: tab.label,
-      iconUrl: tab.iconUrl || '',
-      content: tab.content,
-      heroTalentsId: tab.heroTalentsId,
-    })) || [];
-  {
-    /* <TabsEditor
-          initialTabs={tabsData}
-          defaultTab='tab1'
-          guideId={guide.id}
-        /> */
-  }
-
   return (
     <div className='post-page flex h-max flex-col justify-center pt-10 lg:flex-row'>
       <LeftSideBar />
