@@ -11,6 +11,25 @@ export type GuideProps = Guide & {
   heroTalents: (HeroTalents & { tabs: Tab[] }) | null;
 };
 
+export type GuidePageProps = Prisma.GuideGetPayload<{
+  include: {
+    class: true;
+    specialization: true;
+    modeRelation: true;
+    overviewDifficulty: true;
+    overviewGears: {
+      include: {
+        itemSockets: true;
+      };
+    };
+    heroTalents: {
+      include: {
+        tabs: true;
+      };
+    };
+  };
+}>;
+
 export type InitialClassSelection = ClassSelection & {
   specializations: ClassSpecialization[];
 };
@@ -34,6 +53,7 @@ export type ClassFilter = Prisma.ClassSpecializationGetPayload<{
   };
 }>;
 
+// Тип который я использую в class-guides
 export type GuideButtonWithRelations = Prisma.GuideGetPayload<{
   select: {
     id: true;
@@ -67,3 +87,21 @@ export type GuideButtonWithRelations = Prisma.GuideGetPayload<{
     };
   };
 }>;
+
+export type GearItem = Prisma.OverviewGearGetPayload<{
+  include: {
+    itemSockets: true;
+  };
+}>;
+
+export interface GuideSpecGearProps {
+  guideId: number;
+  gearBanner: string;
+  characterClass: string;
+  classColor: string;
+  gameMode: string;
+  spec: string;
+  gearData: GearItem[];
+}
+
+export type BisGearProps = Prisma.OverviewGearGetPayload<{}>;
