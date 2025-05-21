@@ -79,29 +79,23 @@ model Guide {
     specialization   ClassSpecialization @relation(fields: [specializationId], references: [id])
     specializationId Int
 
+    overviewGears OverviewGear[]
+
     overviewDifficulty OverviewDifficulty?
-    // overviewGear       OverviewGear?
     heroTalents        HeroTalents?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@index([classId])
-    @@index([specializationId])
-    @@index([modeId])
 }
 
 model OverviewDifficulty {
     id Int @id @default(autoincrement())
 
-    spec String
-    mode String
-
-    singleTarget  Int
-    multiTarget   Int
-    utility       Int
-    survivability Int
-    mobility      Int
+    singleTarget  Int?
+    multiTarget   Int?
+    utility       Int?
+    survivability Int?
+    mobility      Int?
 
     guide   Guide @relation(fields: [guideId], references: [id])
     guideId Int   @unique
@@ -141,87 +135,68 @@ model Tab {
     @@index([value])
 }
 
-// model OverviewGear {
-//     id Int @id @default(autoincrement())
+model OverviewGear {
+    id Int @id @default(autoincrement())
 
-//     headImg     String?
-//     headLink    String?
-//     headSocket  String?
-//     headEnchant String?
+    itemSlot        String?
+    itemName        String?
+    itemImg         String?
+    itemLink        String?
+    itemEnchantName String?
+    itemEnchantImg  String?
+    itemEnchantUrl  String?
 
-//     neckImg     String?
-//     neckLink    String?
-//     neckSocket1 String?
-//     neckSocket2 String?
+    itemSockets Socket[]
 
-//     shouldersImg  String?
-//     shouldersLink String?
+    guide   Guide @relation(fields: [guideId], references: [id])
+    guideId Int // Связь с Guide
 
-//     backImg     String?
-//     backLink    String?
-//     backEnchant String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-//     chestImg     String?
-//     chestLink    String?
-//     chestEnchant String?
+    @@index([guideId])
+}
 
-//     wristImg     String?
-//     wristLink    String?
-//     wristSocket1 String?
-//     wristEnchant String?
+model Socket {
+    id Int @id @default(autoincrement())
 
-//     handsImg     String?
-//     handsLink    String?
-//     handsEnchant String?
+    socketName String?
+    socketImg  String?
+    socketUrl  String?
 
-//     waistImg     String?
-//     waistLink    String?
-//     waistSocket1 String?
+    slotType SlotType? // Тип слота для сокета (опционально)
 
-//     legsImg     String?
-//     legsLink    String?
-//     legsEnchant String?
+    overviewGear   OverviewGear @relation(fields: [overviewGearId], references: [id])
+    overviewGearId Int // Связь с OverviewGear
 
-//     feetImg     String?
-//     feetLink    String?
-//     feetEnchant String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-//     fingerOneImg     String?
-//     fingerOneLink1   String?
-//     fingerOneSocket1 String?
-//     fingerOneSocket2 String?
-//     fingerOneSocket3 String?
-//     fingerOneEnchant String?
-
-//     fingerTwoImg     String?
-//     fingerTwoLink    String?
-//     fingerTwoSocket1 String?
-//     fingerTwoSocket2 String?
-//     fingerTwoSocket3 String?
-//     fingerTwoEnchant String?
-
-//     trinketOneImg  String?
-//     trinketOneLink String?
-
-//     trinketTwoImg  String?
-//     trinketTwoLink String?
-
-//     mainHandImg     String?
-//     mainHandLink    String?
-//     mainHandEnchant String?
-
-//     offHandImg     String?
-//     offHandLink    String?
-//     offHandEnchant String?
-
-//     guide   Guide @relation(fields: [guideId], references: [id])
-//     guideId Int   @unique
-
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-// }
+    @@index([overviewGearId])
+}
 
 enum UserRole {
     USER
     ADMIN
+}
+
+enum SlotType {
+    HEAD
+    NECK
+    SHOULDER
+    BACK
+    CHEST
+    SHIRT
+    TABARD
+    WRIST
+    HAND
+    BELT
+    LEGS
+    FEET
+    FINGER
+    SECOND_FINGER
+    TRINKET
+    SECOND_TRINKET
+    MAIN_HAND
+    OFF_HAND
 }
