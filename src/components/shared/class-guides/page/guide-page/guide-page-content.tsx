@@ -14,7 +14,6 @@ interface GuideProps {
 }
 
 export const GuidePageContent = ({ guide }: GuideProps) => {
-  // console.log(guide);
   return (
     <div>
       <Container className='secondary max-w-[1250px] px-4 pb-10'>
@@ -26,7 +25,7 @@ export const GuidePageContent = ({ guide }: GuideProps) => {
               characterClass={guide.class.name}
               classColor={guide.class.classColor}
               spec={guide.specialization.name}
-              patch={guide.patch}
+              patch={guide.expansion.patchVersion}
               mode={guide.modeRelation.name}
               updateDate={guide.updatedAt.toISOString()}
             />
@@ -35,7 +34,7 @@ export const GuidePageContent = ({ guide }: GuideProps) => {
               title='Обзор'
               characterClass={guide.class.name}
               spec={guide.specialization.name}
-              patch={guide.patch}
+              patch={guide.expansion.patchVersion}
             />
 
             <div className='flex flex-wrap gap-x-2.5 gap-y-5 lg:flex-nowrap'>
@@ -72,7 +71,7 @@ export const GuidePageContent = ({ guide }: GuideProps) => {
               title='Героические таланты'
               characterClass={guide.class.name}
               spec={guide.specialization.name}
-              patch={guide.patch}
+              patch={guide.expansion.patchVersion}
             />
           </div>
         </div>

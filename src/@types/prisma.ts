@@ -1,15 +1,9 @@
 import {
   ClassSelection,
   ClassSpecialization,
-  Guide,
-  HeroTalents,
+  Expansion,
   Prisma,
-  Tab,
 } from '@prisma/client';
-
-export type GuideProps = Guide & {
-  heroTalents: (HeroTalents & { tabs: Tab[] }) | null;
-};
 
 export type GuidePageProps = Prisma.GuideGetPayload<{
   include: {
@@ -22,11 +16,7 @@ export type GuidePageProps = Prisma.GuideGetPayload<{
         itemSockets: true;
       };
     };
-    heroTalents: {
-      include: {
-        tabs: true;
-      };
-    };
+    expansion: true;
   };
 }>;
 
@@ -57,7 +47,7 @@ export type ClassFilter = Prisma.ClassSpecializationGetPayload<{
 export type GuideButtonWithRelations = Prisma.GuideGetPayload<{
   select: {
     id: true;
-    patch: true;
+    slug: true;
     class: {
       select: {
         name: true;
@@ -85,6 +75,13 @@ export type GuideButtonWithRelations = Prisma.GuideGetPayload<{
         activityBg: true;
       };
     };
+    expansion: {
+      select: {
+        name: true;
+        patchName: true;
+        patchVersion: true;
+      };
+    };
   };
 }>;
 
@@ -103,3 +100,11 @@ export interface GuideSpecGearProps {
   spec: string;
   gearData: GearItem[];
 }
+
+export type HeroTalentsProps = Prisma.SectionGetPayload<{
+  include: {
+    tabs: true;
+  };
+}>;
+
+export type ExpansionProps = Expansion & {};

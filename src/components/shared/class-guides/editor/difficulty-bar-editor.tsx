@@ -31,7 +31,7 @@ export const DifficultyBarEditor = ({
     getDescription,
     handleSave,
   } = useDifficultyEditor({ guideId, item });
-  console.log(item);
+
   return (
     <div className='relative max-w-[360px] flex-1 rounded-[12px] border p-6'>
       <div className='flex flex-col gap-5'>

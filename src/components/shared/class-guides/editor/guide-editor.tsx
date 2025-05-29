@@ -1,3 +1,5 @@
+'use client';
+
 import { GuidePageProps } from '@root/@types/prisma';
 import { BisGearEditor } from './bis-gear-editor';
 import { LeftSideBar } from '@root/components/shared/class-guides';
@@ -26,7 +28,7 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
               />
               <div className='text-grey-275 mb-4 flex flex-wrap gap-x-4 gap-y-2 font-sans text-lg font-semibold'>
                 <span className='flex h-9 items-center gap-6 rounded-sm bg-[#057AF0] pr-2.5 pl-2.5'>
-                  <span>Patch {guide.patch}</span>
+                  <span>Patch {guide.expansion.patchVersion}</span>
                 </span>
               </div>
             </div>
@@ -66,7 +68,7 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
           title='Обзор'
           characterClass={guide.class.name}
           spec={guide.specialization.name}
-          patch={guide.patch}
+          patch={guide.expansion.patchVersion}
         />
 
         <div className='flex flex-wrap gap-x-2.5 gap-y-5 lg:flex-nowrap'>
@@ -103,7 +105,7 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
           title='Героические таланты'
           characterClass={guide.class.name}
           spec={guide.specialization.name}
-          patch={guide.patch}
+          patch={guide.expansion.patchVersion}
         />
       </div>
     </div>

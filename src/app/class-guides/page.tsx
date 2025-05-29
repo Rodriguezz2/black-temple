@@ -10,7 +10,7 @@ const getCachedGuides = unstable_cache(
     return prisma.guide.findMany({
       select: {
         id: true,
-        patch: true, // Добавляем поле patch
+        slug: true,
         class: {
           select: { name: true, classColor: true, classIcon: true },
         },
@@ -18,7 +18,7 @@ const getCachedGuides = unstable_cache(
           select: {
             name: true,
             specIcon: true,
-            specBackground: true, // Добавляем поле specBackground
+            specBackground: true,
             specRole: { select: { name: true, roleIcon: true } },
           },
         },
@@ -26,7 +26,14 @@ const getCachedGuides = unstable_cache(
           select: {
             name: true,
             activityIcon: true,
-            activityBg: true, // Добавляем поле activityBg
+            activityBg: true,
+          },
+        },
+        expansion: {
+          select: {
+            name: true,
+            patchName: true,
+            patchVersion: true,
           },
         },
       },
