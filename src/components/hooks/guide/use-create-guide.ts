@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { createGuideAction } from '@root/app/class-guides/_actions/create-guide';
-import { transliterate } from 'transliteration';
 
 export function useCreateGuide() {
   const router = useRouter();
