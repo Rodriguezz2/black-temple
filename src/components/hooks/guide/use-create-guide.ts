@@ -23,12 +23,11 @@ export function useCreateGuide() {
       !selectedMode ||
       !selectedExpansion
     ) {
-      toast.error('Выберите класс, специализацию, режим и версию игры');
       return;
     }
 
     setIsLoading(true);
-    const formData = new FormData(e.currentTarget); // Используем данные из формы
+    const formData = new FormData(e.currentTarget);
     formData.append('classId', `${selectedClass}`);
     formData.append('specializationId', `${selectedSpec}`);
     formData.append('modeId', `${selectedMode}`);
@@ -44,7 +43,7 @@ export function useCreateGuide() {
         console.log('Созданный slug:', result.guide.slug);
         router.push(`/class-guides/${result.guide.slug}`);
       } else {
-        toast.error(result.error || 'Не удалось создать гайд');
+        toast.error('Не удалось создать гайд');
       }
     } catch (error) {
       toast.error('Произошла ошибка при создании гайда');
