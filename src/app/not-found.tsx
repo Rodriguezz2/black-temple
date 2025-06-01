@@ -2,7 +2,6 @@
 
 import { Button } from '@root/components/ui/button';
 import { Title } from '@root/components/ui/title';
-import { cn } from '@root/lib/utils';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -39,8 +38,6 @@ export default function UnauthorizedPage() {
             </a>
           </div>
         </div>
-
-        <img src={imageUrl} alt={title} width={300} />
       </div>
     </div>
   );
