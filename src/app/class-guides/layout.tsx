@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 
+// Определяем базовый URL для метаданных
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const metadataBase = new URL(baseUrl);
+
 export const metadata: Metadata = {
+  metadataBase,
   title: 'Гайды по классам WoW | Актуальные сборки и ротации',
   description:
     'Полные руководства по всем классам World of Warcraft: билды, ротации, таланты, экипировка и советы для PvE и PvP. Актуальные гайды для текущего патча.',
@@ -20,11 +25,11 @@ export const metadata: Metadata = {
     title: 'Полные гайды по классам World of Warcraft',
     description:
       'Сборники лучших билдов, ротаций и советов для всех классов WoW',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/class-guides`,
+    url: `${baseUrl}/class-guides`,
     siteName: 'WoW Guides',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/assets/class-guide.png`,
+        url: `${baseUrl}/assets/meta/class-guide.png`,
         width: 1200,
         height: 630,
         alt: 'Гайды по классам WoW',
@@ -37,10 +42,14 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Гайды по классам WoW',
     description: 'Актуальные руководства для всех классов World of Warcraft',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL}/assets/meta/class-guide.png`],
+    images: [`${baseUrl}/assets/meta/class-guide.png`],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/class-guides`,
+    canonical: `${baseUrl}/class-guides`,
   },
 };
 
@@ -49,5 +58,5 @@ export default function ClassGuideLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return <main className='container mx-auto px-4 py-8'>{children}</main>;
 }

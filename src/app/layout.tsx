@@ -6,10 +6,8 @@ import './globals.css';
 import { Providers } from '@root/components/shared/provider';
 import NextTopLoader from 'nextjs-toploader';
 
-// Задаем metadataBase в зависимости от окружения
-const metadataBase = process.env.NEXT_PUBLIC_BASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_BASE_URL)
-  : new URL('http://localhost:3000');
+// Определяем базовый URL в зависимости от окружения
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 // Шрифт Nunito для кириллицы
 const nunito = Nunito({
@@ -20,7 +18,7 @@ const nunito = Nunito({
 
 // Метаданные для главной страницы
 export const metadata: Metadata = {
-  metadataBase,
+  metadataBase: new URL(baseUrl),
   title: 'Black Temple - Гайды по World of Warcraft',
   description:
     'Гайды по World of Warcraft: рейды, мифик+, классы и специализации. Узнайте, как выживать и побеждать в WoW!',
@@ -41,7 +39,7 @@ export const metadata: Metadata = {
     siteName: 'Black Temple',
     images: [
       {
-        url: '/assets/meta/main-page.png',
+        url: `${baseUrl}/assets/meta/main-page.png`,
         width: 1200,
         height: 630,
         alt: 'Black Temple - Гайды по World of Warcraft',
@@ -55,7 +53,7 @@ export const metadata: Metadata = {
     title: 'Black Temple - Гайды по World of Warcraft',
     description:
       'Гайды по World of Warcraft: рейды, мифик+, классы и специализации. Узнайте, как выживать и побеждать в WoW!',
-    images: ['/assets/meta/main-page.png'],
+    images: [`${baseUrl}/assets/meta/main-page.png`],
   },
   robots: {
     index: true,
