@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   title: 'Black Temple - Гайды по World of Warcraft',
   description:
     'Гайды по World of Warcraft: рейды, мифик+, классы и специализации. Узнайте, как выживать и побеждать в WoW!',
+  keywords: [
+    'World of Warcraft',
+    'WoW гайды',
+    'рейды',
+    'мифик+',
+    'классы WoW',
+    'гайды по WoW',
+    'Black Temple',
+  ],
   openGraph: {
     title: 'Black Temple - Гайды по World of Warcraft',
     description:
