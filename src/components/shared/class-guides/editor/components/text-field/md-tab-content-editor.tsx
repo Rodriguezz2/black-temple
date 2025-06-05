@@ -3,16 +3,14 @@ import { cn } from '@root/lib/utils';
 import { useTheme } from 'next-themes';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-import dynamic from 'next/dynamic';
 import TurndownService from 'turndown';
+import MDEditor from '@uiw/react-md-editor';
 
 interface MDTabContentEditorProps {
   content: string;
   onContentChange: (value: string) => void;
   className?: string;
 }
-
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
 export const MDTabContentEditor: React.FC<MDTabContentEditorProps> = ({
   content,
@@ -71,7 +69,7 @@ export const MDTabContentEditor: React.FC<MDTabContentEditorProps> = ({
       <MDEditor
         value={content}
         onChange={value => onContentChange(value || '')}
-        height={300}
+        height={200}
         preview='live'
       />
     </div>

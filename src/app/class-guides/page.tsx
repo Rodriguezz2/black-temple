@@ -8,10 +8,11 @@ import { cn } from '@root/lib/utils';
 const getCachedGuides = unstable_cache(
   async () => {
     return prisma.guide.findMany({
+      where: { status: 'PUBLISHED' },
       select: {
         id: true,
         slug: true,
-        User: {
+        user: {
           select: {
             fullName: true,
           },
@@ -72,7 +73,7 @@ const getCachedSpecFilter = unstable_cache(
         id: true,
         name: true,
         specIcon: true,
-        specBackground: true, // Добавляем для консистентности
+        specBackground: true,
         class: { select: { name: true, classColor: true, classIcon: true } },
         specRole: { select: { name: true, roleIcon: true } },
       },

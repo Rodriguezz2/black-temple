@@ -7,13 +7,14 @@ import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const guides = await prisma.guide.findMany({
+    where: { status: 'PUBLISHED' },
     take: 12,
     orderBy: { createdAt: 'desc' },
 
     select: {
       id: true,
       slug: true,
-      User: {
+      user: {
         select: {
           fullName: true,
         },

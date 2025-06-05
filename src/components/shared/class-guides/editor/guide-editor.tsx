@@ -1,22 +1,38 @@
 'use client';
 
 import { GuidePageProps } from '@root/@types/prisma';
-import { BisGearEditor } from './bis-gear-editor';
 import { LeftSideBar } from '@root/components/shared/class-guides';
 import { GuideSpecBanner } from '@root/components/shared/class-guides/page/guide-page';
 import { GuideAnchorWrapper } from '@root/components/shared/wrapper';
 import { Title } from '@root/components/ui/title';
+import { GuideStatusComponent } from './components/guide-status/guide-status-component';
 import { DifficultyBarEditor } from './difficulty-bar-editor';
+import { BisGearEditor } from './components/bis-gear/bis-gear-editor';
+import { SectionSelectorDrawer } from './components/section/section-selector';
+
+import { useRouter } from 'next/navigation';
+import { SectionEditor } from './components/section/section-editor';
 
 interface GuideEditorProps {
   guide: GuidePageProps;
   className?: string;
 }
 
-export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
+export const GuideEditor: React.FC<GuideEditorProps> = ({
+  guide,
+  className,
+}) => {
+  const router = useRouter();
+
+  const handleSectionAdded = () => {
+    router.refresh();
+  };
+
   return (
-    <div className='post-page flex h-max flex-col justify-center pt-10 lg:flex-row'>
-      <LeftSideBar />
+    <div
+      className={`post-page flex h-max flex-col justify-center pt-10 lg:flex-row ${className}`}
+    >
+      <LeftSideBar guide={guide} />
       <div className='flex w-full flex-1 flex-col pt-2 lg:w-[815px] lg:pt-0 xl:mx-auto'>
         <div className='container mt-0 flex w-full flex-1 origin-top flex-col gap-y-4'>
           <div className='flex flex-row justify-between gap-4'>
@@ -30,6 +46,7 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
                 <span className='flex h-9 items-center gap-6 rounded-sm bg-[#057AF0] pr-2.5 pl-2.5'>
                   <span>Patch {guide.expansion.patchVersion}</span>
                 </span>
+                <GuideStatusComponent guide={guide} />
               </div>
             </div>
             <div className='hidden lg:block'>
@@ -100,12 +117,16 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({ guide }) => {
             gearData={guide.overviewGears}
           />
         </div>
-        <GuideAnchorWrapper
-          anchorId='hero-talents-header'
-          title='Героические таланты'
-          characterClass={guide.class.name}
-          spec={guide.specialization.name}
-          patch={guide.expansion.patchVersion}
+
+        {/* Рендерим секции с помощью SectionEditor */}
+        {guide.sections.map(section => (
+          <SectionEditor key={section.id} section={section} guide={guide} />
+        ))}
+
+        <SectionSelectorDrawer
+          guideId={guide.id}
+          guide={guide}
+          onSectionAdded={handleSectionAdded}
         />
       </div>
     </div>
