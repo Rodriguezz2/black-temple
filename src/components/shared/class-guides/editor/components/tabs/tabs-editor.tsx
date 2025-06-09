@@ -8,7 +8,6 @@ import { ScrollArea, ScrollBar } from '@root/components/ui/scroll-area';
 import { TabData } from '@root/@types/prisma';
 import { useTabsScroll } from '@root/components/hooks';
 import { cn } from '@root/lib/utils';
-
 import { TabTrigger } from './tab-trigger';
 import { TabContent } from './tab-content';
 import { EditorDialog } from './editor-dialog';
@@ -109,7 +108,7 @@ export const TabsEditor: React.FC<TabsEditorProps> = React.memo(
             </Tabs>
           </div>
           <div className='mt-2 flex justify-end'>
-            <Button type='submit' disabled={isSaving}>
+            <Button type='submit' loading={isSaving}>
               <Save className='mr-2 h-4 w-4' />
               Сохранить
             </Button>

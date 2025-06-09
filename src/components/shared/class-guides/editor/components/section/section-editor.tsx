@@ -22,8 +22,10 @@ import {
   useSectionItems,
 } from '@root/components/hooks/guide/edit/sections/use-section';
 import { useRouter } from 'next/navigation';
-import { deleteSection } from '@root/app/class-guides/_actions/section-action';
 import { ConfirmationDialog } from '../confirmation-dialog';
+import { TalentsTab } from '../talents/talents-tab';
+import { deleteSection } from '@root/app/class-guides/_actions/section/section-actions';
+import { useState } from 'react';
 
 interface SectionEditorProps {
   section: GuidePageProps['sections'][number];
@@ -34,6 +36,7 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
   section,
   guide,
 }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
   const { sectionItems, setSectionItems } = useSectionItems(section);
   const { handleDeleteTextField, handleDeleteTabGroup } = useDeleteHandlers(
     sectionItems,
@@ -48,11 +51,16 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
   const router = useRouter();
 
   const handleDeleteSection = async () => {
-    const result = await deleteSection(section.id);
-    if (result.success) {
-      router.refresh();
-    } else {
-      console.error(result.error);
+    setIsDeleting(true);
+    try {
+      const result = await deleteSection(section.id);
+      if (result.success) {
+        router.refresh();
+      } else {
+        console.error(result.error);
+      }
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -67,7 +75,12 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
         actionButton={
           <ConfirmationDialog
             trigger={
-              <Button variant='destructive' size='icon' title='Удалить секцию'>
+              <Button
+                variant='destructive'
+                loading={isDeleting}
+                size='icon'
+                title='Удалить секцию'
+              >
                 <Trash2 className='h-4 w-4 text-white' />
               </Button>
             }
@@ -93,7 +106,11 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
               actions={
                 <ConfirmationDialog
                   trigger={
-                    <Button variant='destructive' size='icon'>
+                    <Button
+                      loading={isDeleting}
+                      variant='destructive'
+                      size='icon'
+                    >
                       <Trash2 className='h-4 w-4 text-white' />
                     </Button>
                   }
@@ -117,6 +134,14 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
                     guideId={guide.id}
                   />
                 </div>
+              ) : section.type === 'TALENTS' ? (
+                <TalentsTab
+                  initialTabs={item.data.tabs || []}
+                  defaultTab={item.data.tabs?.[0]?.value || ''}
+                  sectionId={section.id}
+                  tabGroupId={item.data.id}
+                  specialization={guide.specialization}
+                />
               ) : (
                 <TabsEditor
                   initialTabs={item.data.tabs || []}

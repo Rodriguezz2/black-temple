@@ -3,13 +3,11 @@ import { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import {
-  deleteTextField,
-  deleteTabGroup,
-  updateSectionItemOrder,
-} from '@root/app/class-guides/_actions/section-action';
 import { GuidePageProps, TabGroupProps } from '@root/@types/prisma';
 import { TextField } from '@prisma/client';
+import { deleteTextField } from '@root/app/class-guides/_actions/text-field/text-field-actions';
+import { deleteTabGroup } from '@root/app/class-guides/_actions/tab/tab-group-action';
+import { updateSectionItemOrder } from '@root/app/class-guides/_actions/dnd/dnd-actions';
 
 export type SectionItem =
   | { type: 'TEXT'; data: TextField; order: number }
@@ -46,35 +44,42 @@ export const useDeleteHandlers = (
 ) => {
   const router = useRouter();
 
-  const handleDeleteTextField = async (textFieldId: number) => {
-    const result = await deleteTextField(textFieldId);
+  const handleDeleteItem = async (
+    id: number,
+    type: 'TEXT' | 'TABS',
+    deleteAction: (id: number) => Promise<{ success: boolean; error?: string }>,
+    successMessage: string,
+    errorMessage: string
+  ) => {
+    const result = await deleteAction(id);
     if (result.success) {
-      toast.success('Текстовое поле удалено');
       setSectionItems(
-        sectionItems.filter(
-          item => item.type !== 'TEXT' || item.data.id !== textFieldId
-        )
+        sectionItems.filter(item => item.type !== type || item.data.id !== id)
       );
+      toast.success(successMessage);
       router.refresh();
     } else {
-      toast.error(result.error || 'Не удалось удалить текстовое поле');
+      toast.error(result.error || errorMessage);
     }
   };
 
-  const handleDeleteTabGroup = async (tabGroupId: number) => {
-    const result = await deleteTabGroup(tabGroupId);
-    if (result.success) {
-      toast.success('Группа вкладок удалена');
-      setSectionItems(
-        sectionItems.filter(
-          item => item.type !== 'TABS' || item.data.id !== tabGroupId
-        )
-      );
-      router.refresh();
-    } else {
-      toast.error(result.error || 'Не удалось удалить группу вкладок');
-    }
-  };
+  const handleDeleteTextField = (textFieldId: number) =>
+    handleDeleteItem(
+      textFieldId,
+      'TEXT',
+      deleteTextField,
+      'Текстовое поле удалено',
+      'Не удалось удалить текстовое поле'
+    );
+
+  const handleDeleteTabGroup = (tabGroupId: number) =>
+    handleDeleteItem(
+      tabGroupId,
+      'TABS',
+      deleteTabGroup,
+      'Группа вкладок удалена',
+      'Не удалось удалить группу вкладок'
+    );
 
   return { handleDeleteTextField, handleDeleteTabGroup };
 };

@@ -2,9 +2,9 @@
 
 import { useState, useCallback } from 'react';
 import { TabData } from '@root/@types/prisma';
-import { createTabInGroup } from '@root/app/class-guides/_actions/section-action';
 import { useTabsMutations } from '@root/components/hooks/guide/edit/tab-editor/use-tabs-mutations';
 import toast from 'react-hot-toast';
+import { createTabInGroup } from '@root/app/class-guides/_actions/tab/tab-action';
 
 interface UseTabsEditorProps {
   initialTabs: TabData[];
@@ -51,6 +51,19 @@ export const useTabsEditor = ({
       )
     );
   }, []);
+
+  const updateTabImportString = useCallback(
+    (value: string, importString: string) => {
+      setTabs(tabs =>
+        tabs.map(tab =>
+          tab.value === value
+            ? { ...tab, importString, isNew: tab.isNew || false }
+            : tab
+        )
+      );
+    },
+    []
+  );
 
   const openEditDialog = useCallback((tab: TabData) => {
     setEditingTab(tab);
@@ -123,21 +136,19 @@ export const useTabsEditor = ({
     async (e: React.FormEvent) => {
       e.preventDefault();
       setIsSaving(true);
-      try {
-        saveTabsMutation.mutate(tabs, {
-          onSuccess: () => {
-            toast.success('Все вкладки сохранены');
-            setTabs(tabs => tabs.map(tab => ({ ...tab, isNew: false })));
-          },
-          onError: error => {
-            toast.error(`Ошибка: ${error.message}`);
-          },
-        });
-      } catch {
-        toast.error('Не удалось сохранить вкладки');
-      } finally {
-        setIsSaving(false);
-      }
+
+      saveTabsMutation.mutate(tabs, {
+        onSettled: () => {
+          setIsSaving(false);
+        },
+        onSuccess: () => {
+          toast.success('Все вкладки сохранены');
+          setTabs(tabs => tabs.map(tab => ({ ...tab, isNew: false })));
+        },
+        onError: error => {
+          toast.error(`Ошибка: ${error.message}`);
+        },
+      });
     },
     [tabs, saveTabsMutation]
   );
@@ -151,6 +162,7 @@ export const useTabsEditor = ({
     setActiveTab,
     addNewTab,
     updateTabContent,
+    updateTabImportString,
     openEditDialog,
     saveTabChanges,
     handleDeleteTab,

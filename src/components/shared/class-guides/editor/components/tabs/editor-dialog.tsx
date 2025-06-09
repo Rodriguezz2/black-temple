@@ -50,7 +50,10 @@ export const EditorDialog: React.FC<EditorDialogProps> = React.memo(
 
     return (
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-        <DialogContent className={cn('sm:max-w-[425px]', className)}>
+        <DialogContent
+          className={cn('sm:max-w-[425px]', className)}
+          aria-describedby={undefined}
+        >
           <DialogHeader>
             <DialogTitle>Редактирование таба</DialogTitle>
           </DialogHeader>
@@ -81,12 +84,12 @@ export const EditorDialog: React.FC<EditorDialogProps> = React.memo(
               variant='destructive'
               onClick={handleDelete}
               className='mr-auto text-amber-50'
-              disabled={isDeleting}
+              loading={isDeleting}
             >
               <Trash2 className='mr-2 h-4 w-4' />
               Удалить
             </Button>
-            <Button type='button' onClick={handleSave}>
+            <Button type='button' loading={isDeleting} onClick={handleSave}>
               Сохранить
             </Button>
           </DialogFooter>
