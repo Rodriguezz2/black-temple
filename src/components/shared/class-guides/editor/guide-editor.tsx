@@ -9,7 +9,6 @@ import { GuideStatusComponent } from './components/guide-status/guide-status-com
 import { DifficultyBarEditor } from './difficulty-bar-editor';
 import { BisGearEditor } from './components/bis-gear/bis-gear-editor';
 import { SectionSelectorDrawer } from './components/section/section-selector';
-
 import { useRouter } from 'next/navigation';
 import { SectionEditor } from './components/section/section-editor';
 import { Button } from '@root/components/ui/button';
@@ -30,7 +29,7 @@ export const GuideEditor: React.FC<GuideEditorProps> = ({
   const handleSectionAdded = () => {
     router.refresh();
   };
-
+  console.log(guide);
   return (
     <div
       className={`post-page flex h-max flex-col justify-center pt-10 lg:flex-row ${className}`}

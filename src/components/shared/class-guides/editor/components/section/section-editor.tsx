@@ -1,6 +1,6 @@
 'use client';
 
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -26,6 +26,8 @@ import { ConfirmationDialog } from '../confirmation-dialog';
 import { TalentsTab } from '../talents/talents-tab';
 import { deleteSection } from '@root/app/class-guides/_actions/section/section-actions';
 import { useState } from 'react';
+import { RotationTab } from '../rotation/rotation-tab';
+import { RotationProvider } from '../rotation/rotation-context';
 
 interface SectionEditorProps {
   section: GuidePageProps['sections'][number];
@@ -37,6 +39,10 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
   guide,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [itemDimensions] = useState<{
+    [key: string]: { width: number; height: number };
+  }>({});
   const { sectionItems, setSectionItems } = useSectionItems(section);
   const { handleDeleteTextField, handleDeleteTabGroup } = useDeleteHandlers(
     sectionItems,
@@ -62,6 +68,62 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const renderDragOverlay = () => {
+    const activeItem = sectionItems.find(
+      item => `${item.type}-${item.data.id}` === activeId
+    );
+    if (!activeItem) return null;
+
+    const dimensions = itemDimensions[activeId || ''] || {};
+
+    return (
+      <div
+        style={{
+          width: dimensions.width ? `${dimensions.width}px` : 'auto',
+          height: dimensions.height ? `${dimensions.height}px` : 'auto',
+          opacity: 0.8,
+          zIndex: 1000,
+          boxSizing: 'border-box',
+        }}
+      >
+        {activeItem.type === 'TEXT' ? (
+          <TextFieldEditor
+            textField={{
+              id: activeItem.data.id,
+              content: activeItem.data.content,
+            }}
+            sectionId={section.id}
+            guideId={guide.id}
+          />
+        ) : section.type === 'TALENTS' ? (
+          <TalentsTab
+            initialTabs={activeItem.data.tabs || []}
+            defaultTab={activeItem.data.tabs?.[0]?.value || ''}
+            sectionId={section.id}
+            tabGroupId={activeItem.data.id}
+            specialization={guide.specialization}
+          />
+        ) : section.type === 'ROTATION' ? (
+          <RotationProvider>
+            <RotationTab
+              initialTabs={activeItem.data.tabs || []}
+              defaultTab={activeItem.data.tabs?.[0]?.value || ''}
+              sectionId={section.id}
+              tabGroupId={activeItem.data.id}
+            />
+          </RotationProvider>
+        ) : (
+          <TabsEditor
+            initialTabs={activeItem.data.tabs || []}
+            defaultTab={activeItem.data.tabs?.[0]?.value || ''}
+            sectionId={section.id}
+            tabGroupId={activeItem.data.id}
+          />
+        )}
+      </div>
+    );
   };
 
   return (
@@ -92,8 +154,14 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
       />
       <DndContext
         collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
+        onDragStart={event => {
+          setActiveId(event.active.id as string);
+          handleDragStart();
+        }}
+        onDragEnd={event => {
+          setActiveId(null);
+          handleDragEnd(event);
+        }}
       >
         <SortableContext
           items={sectionItems.map(item => `${item.type}-${item.data.id}`)}
@@ -142,6 +210,15 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
                   tabGroupId={item.data.id}
                   specialization={guide.specialization}
                 />
+              ) : section.type === 'ROTATION' ? (
+                <RotationProvider>
+                  <RotationTab
+                    initialTabs={item.data.tabs || []}
+                    defaultTab={item.data.tabs?.[0]?.value || ''}
+                    sectionId={section.id}
+                    tabGroupId={item.data.id}
+                  />
+                </RotationProvider>
               ) : (
                 <TabsEditor
                   initialTabs={item.data.tabs || []}
@@ -153,6 +230,7 @@ export const SectionEditor: React.FC<SectionEditorProps> = ({
             </SortableItem>
           ))}
         </SortableContext>
+        <DragOverlay>{renderDragOverlay()}</DragOverlay>
       </DndContext>
       <Separator className='my-4' />
       <ContentTypeSelector

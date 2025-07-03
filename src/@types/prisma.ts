@@ -41,17 +41,6 @@ export type InitialClassSelection = ClassSelection & {
   specializations: ClassSpecialization[];
 };
 
-export interface TabData {
-  id?: number;
-  value: string;
-  label: string;
-  iconUrl: string | null;
-  content: string;
-  importString: string;
-  tabGroupId: number;
-  isNew?: boolean;
-}
-
 export type TabGroupProps = Prisma.TabGroupGetPayload<{
   include: {
     tabs: true;
@@ -133,3 +122,38 @@ export interface GuideSpecGearProps {
 }
 
 export type ExpansionProps = Expansion & {};
+
+export interface Ability {
+  id: string;
+  url: string;
+  spellId?: string; // Извлекается из URL
+  type?: 'spell' | 'item'; // Извлекается из URL
+  isPtr?: boolean; // Извлекается из URL
+  isPrepull: boolean; // Может быть в JSON
+  order: number; // Присутствует в JSON
+  verticalRowId?: string | null; // Присутствует в JSON
+}
+
+export interface VerticalRow {
+  id: string;
+  positionAfter?: string;
+  order?: number;
+  abilities: Ability[];
+}
+
+export interface TabData {
+  id?: number;
+  value: string;
+  label: string;
+  iconUrl: string | null;
+  content: string;
+  importString: string;
+  tabGroupId: number;
+  isNew?: boolean;
+  rotationId?: number | null;
+  rotation?: {
+    id: number;
+    abilities: Ability[];
+    verticalRows: VerticalRow[];
+  } | null;
+}
